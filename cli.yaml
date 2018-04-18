@@ -1,0 +1,74 @@
+name: java-env-manager
+version: "0.0.1"
+author: Tristan Partin <tristan.partin@gmail.com>
+about: Like NVM (Node Version Manager) for Java
+args:
+  - debug:
+      short: d
+      long: debug
+      help: Send debug messages to standard out
+  - location:
+      short: l
+      long: location
+      help: If you aren't using the default location ($HOME/.java-env-manager) or have an environment variable set (JAVA_ENV_MANAGER_HOME), you can specify a custom location
+      takes_value: true
+  - version:
+      short: v
+      long: version
+      help: Prints the Java Environment Manager version
+subcommands:
+  - add:
+      about: Add a Java version
+      args:
+        - name:
+            short: n
+            long: name
+            help: Name to call the Java version
+            takes_value: true
+        - path:
+            short: p
+            long: path
+            help: Path to the Java version
+            takes_value: true
+  - doctor:
+      about: Checks for problems with the settings.json file
+      args:
+        - fix:
+            short: f
+            long: fix
+            help: Fix the problems found with the settings.json file
+  - init:
+      about: Initialize the Java Environment Manager
+  - list:
+      about: List all known Java versions
+  - remove:
+      about: Remove a Java version
+      args:
+        - name:
+            short: n
+            long: name
+            help: The Java version to remove
+  - set:
+      about: Set the current Java version
+      args:
+        - name:
+            short: n
+            long: name
+            help: The Java version to set as active
+  - update:
+      about: Update the path a name points to
+      args:
+        - name:
+            short: n
+            long: name
+            help: Name of the Java version to update
+            takes_value: true
+        - path:
+            short: p
+            long: path
+            help: Updated path to the Java version
+            takes_value: true
+  - version:
+      about: Print the name of the current Java version
+  - which:
+      about: Print the path to the current Java executables
