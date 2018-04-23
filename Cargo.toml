@@ -1,8 +1,6 @@
-[package]
-name = "java-env-manager"
-version = "0.1.0"
-authors = ["Tristan Partin <tristan.partin@gmail.com>"]
-
-[dependencies]
-clap = {version = "2.31", features = ["yaml"]}
-serde_json = "1.0"
+[workspace]
+members = [
+    "java-env-manager-cli",
+    "java-env-manager-gui",
+    "libjem"
+]
