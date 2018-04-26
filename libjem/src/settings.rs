@@ -20,7 +20,7 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn get() -> Option<OsString> {
+    pub fn get_program_dir() -> Option<OsString> {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::home_dir().map(|path| {
                 path.join(".java-env-manager").into()

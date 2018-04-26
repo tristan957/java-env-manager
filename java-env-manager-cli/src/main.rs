@@ -3,7 +3,6 @@ extern crate clap;
 extern crate libjem;
 
 use clap::App;
-use libjem::settings::Settings;
 
 fn main() {
     let yaml = load_yaml!("../cli.yaml");
@@ -11,37 +10,35 @@ fn main() {
 
     match matches.subcommand() {
         ("add", Some(add_matches)) => {
-            match Settings::get() {
-                Ok(_) => {},
-                Err(error) => println!("{}", error),
-            };
-            // libjem::add::command();
+            let name = add_matches.value_of("name").expect("add requires a name\nUSAGE: java-env-manager add --name <name> --path <path>");
+            let path = add_matches.value_of_os("path").expect("add requires a path\nUSAGE: java-env-manager add --name <name> --path <path>");
+            libjem::add::command(name, path);
         },
-        ("doctor", Some(doctor_matches)) => {
+        ("doctor", Some(_doctor_matches)) => {
             println!("doctor");
         },
-        ("help", Some(help_matches)) => {
+        ("help", Some(_help_matches)) => {
             println!("help");
         },
-        ("init", Some(init_matches)) => {
+        ("init", Some(_init_matches)) => {
             println!("init");
         },
-        ("list", Some(list_matches)) => {
+        ("list", Some(_list_matches)) => {
             println!("list");
         },
-        ("remove", Some(remove_matches)) => {
+        ("remove", Some(_remove_matches)) => {
             println!("remove");
         },
-        ("set", Some(set_matches)) => {
+        ("set", Some(_set_matches)) => {
             println!("set");
         },
-        ("update", Some(update_matches)) => {
+        ("update", Some(_update_matches)) => {
             println!("update");
         },
-        ("version", Some(version_matches)) => {
+        ("version", Some(_version_matches)) => {
             println!("version");
         },
-        ("which", Some(which_matches)) => {
+        ("which", Some(_which_matches)) => {
             println!("which");
         },
         ("", None) => println!("help"),
