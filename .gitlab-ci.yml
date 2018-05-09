@@ -1,6 +1,16 @@
-image: rust:latest
+image: tristan957/jem-ci:latest
 
-build:
-  stage: build
+cache:
+  paths:
+  - target/
+
+build-cli:
+  stage: Build CLI
   script:
+    - cd $CI_PROJECT_PATH/java-env-manager-cli
+    - cargo build
+build-gui:
+  stage: Build GUI
+  script:
+    - cd $CI_PROJECT_PATH/java-env-manager-gui
     - cargo build
