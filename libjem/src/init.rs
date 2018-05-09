@@ -3,11 +3,21 @@ extern crate serde_json;
 
 use std::fs;
 use std::error::Error;
+use std::path::Path;
 
 use settings::Settings;
 
 pub fn init() -> Result<(), Box<Error>> {
     let mut program_dir = Settings::get_program_dir().expect("No program directory found");
+    
+    if Path::new(&program_dir).exists() {
+        println!("{} already exists", match program_dir.into_string() {
+            Ok(s) => s,
+            Err(_) => String::from("Directory")
+        });
+        return Ok(())
+    }
+
     match fs::create_dir(&program_dir) {
         Ok(_) => {},
         Err(e) => return Err(Box::new(e))
@@ -20,7 +30,7 @@ pub fn init() -> Result<(), Box<Error>> {
     };
 
     match serde_json::to_writer_pretty(&file, &Settings::default()) {
-        Ok(_) => return Ok(()),
-        Err(e) => return Err(Box::new(e))
+        Ok(_) => Ok(()),
+        Err(e) => Err(Box::new(e))
     }
 }
