@@ -11,10 +11,10 @@ stages:
 build-cli:
   stage: build
   script:
-    - cd $CI_PROJECT_PATH/java-env-manager-cli
+    - cd $CI_PROJECT_DIR/java-env-manager-cli
     - cargo build
 build-gui:
   stage: build
   script:
-    - cd $CI_PROJECT_PATH/java-env-manager-gui
+    - cd $CI_PROJECT_DIR/java-env-manager-gui
     - cargo build
