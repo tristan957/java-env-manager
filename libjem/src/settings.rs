@@ -13,12 +13,12 @@ struct Distribution {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Settings {
     distributions: Vec<Distribution>,
-    set: bool,
+    set: String,
 }
 
 impl Settings {
     pub fn default() -> Settings {
-        Settings { distributions: Vec::new(), set: false }
+        Settings { distributions: Vec::new(), set: String::default() }
     }
 
     pub fn location() -> Option<OsString> {
