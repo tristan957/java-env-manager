@@ -4,13 +4,17 @@ cache:
   paths:
   - target/
 
+stages:
+  - build
+  - test
+
 build-cli:
-  stage: Build CLI
+  stage: build
   script:
     - cd $CI_PROJECT_PATH/java-env-manager-cli
     - cargo build
 build-gui:
-  stage: Build GUI
+  stage: build
   script:
     - cd $CI_PROJECT_PATH/java-env-manager-gui
     - cargo build
