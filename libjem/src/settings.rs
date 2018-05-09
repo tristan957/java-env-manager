@@ -1,11 +1,8 @@
-// extern crate serde;
-extern crate serde_json;
 extern crate serde;
+extern crate serde_json;
 
-// use std::fs::File;
 use std::env;
 use std::ffi::OsString;
-// use std::io;
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Distribution {
@@ -20,6 +17,20 @@ pub struct Settings {
 }
 
 impl Settings {
+    pub fn default() -> Settings {
+        Settings { distributions: Vec::new(), set: false }
+    }
+
+    pub fn location() -> Option<OsString> {
+        match Settings::get_program_dir() {
+            Some(mut os) => {
+                os.push("/settings.json");
+                Option::from(os)
+            },
+            None => Option::default()
+        }
+    }
+
     pub fn get_program_dir() -> Option<OsString> {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::home_dir().map(|path| {

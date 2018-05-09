@@ -3,6 +3,8 @@ extern crate clap;
 extern crate libjem;
 
 use clap::App;
+use libjem::add::add;
+use libjem::init::init;
 
 fn main() {
     let yaml = load_yaml!("../cli.yaml");
@@ -12,7 +14,7 @@ fn main() {
         ("add", Some(add_matches)) => {
             let name = add_matches.value_of("name").expect("add requires a name\nUSAGE: java-env-manager add --name <name> --path <path>");
             let path = add_matches.value_of_os("path").expect("add requires a path\nUSAGE: java-env-manager add --name <name> --path <path>");
-            libjem::add::command(name, path);
+            add(name, path);
         },
         ("doctor", Some(_doctor_matches)) => {
             println!("doctor");
@@ -21,7 +23,10 @@ fn main() {
             println!("help");
         },
         ("init", Some(_init_matches)) => {
-            println!("init");
+            match init() {
+                Ok(_) => {},
+                Err(_) => println!("Unable to initialize the Java Environment Manager")
+            }
         },
         ("list", Some(_list_matches)) => {
             println!("list");
