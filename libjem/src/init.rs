@@ -18,28 +18,10 @@ pub fn init() -> Result<(), Box<Error>> {
         return Ok(())
     }
 
-    match fs::create_dir(&program_dir) {
-        Ok(_) => {},
-        Err(e) => return Err(Box::new(e))
-    }
-
+    fs::create_dir(&program_dir)?;
     program_dir.push("/settings.json");
-    match fs::File::create(program_dir) {
-        Ok(f) => match serde_json::to_writer_pretty(&f, &Settings::default()) {
-            Ok(_) => return Ok(()),
-            Err(e) => return Err(Box::new(e))
-        },
-        Err(e) => return Err(Box::new(e))
-    }
+    fs::File::create(&program_dir)?;
+    Settings::default().set()?;
 
-    // program_dir.push("/settings.json");
-    // let file = match fs::File::create(program_dir) {
-    //     Ok(f) => f,
-    //     Err(e) => return Err(Box::new(e))
-    // };
-
-    // match serde_json::to_writer_pretty(&file, &Settings::default()) {
-    //     Ok(_) => Ok(()),
-    //     Err(e) => Err(Box::new(e))
-    // }
+    Ok(())
 }
