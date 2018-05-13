@@ -14,7 +14,10 @@ fn main() {
         ("add", Some(add_matches)) => {
             let name = add_matches.value_of("name").expect("add requires a name\nUSAGE: java-env-manager add --name <name> --path <path>");
             let path = add_matches.value_of_os("path").expect("add requires a path\nUSAGE: java-env-manager add --name <name> --path <path>");
-            add(name, path);
+            
+            if let Err(_e) = add(name, path) {
+                eprintln!("Unable to add Java distribution")
+            }
         },
         ("doctor", Some(_doctor_matches)) => {
             println!("doctor");
@@ -23,9 +26,8 @@ fn main() {
             println!("help");
         },
         ("init", Some(_init_matches)) => {
-            match init() {
-                Ok(_) => {},
-                Err(_) => println!("Unable to initialize the Java Environment Manager")
+            if let Err(_e) = init() {
+                eprintln!("Unable to initialize the Java Environment Manager")
             }
         },
         ("list", Some(_list_matches)) => {

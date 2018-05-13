@@ -3,13 +3,13 @@ extern crate serde_json;
 
 use std::env;
 use std::error::Error;
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
 use std::fs;
 
 #[derive(Debug, Deserialize, Serialize)]
-struct Distribution {
+pub struct Distribution {
     name: String,
-    path: String,
+    path: OsString,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -18,7 +18,17 @@ pub struct Settings {
     set: String,
 }
 
+impl Distribution {
+    pub fn new(name: &str, path: &OsStr) -> Distribution {
+        Distribution { name: String::from(name), path: OsString::from(path) }
+    }
+}
+
 impl Settings {
+    pub fn add(&mut self, distro: Distribution) {
+        self.distributions.push(distro);
+    }
+
     pub fn default() -> Settings {
         Settings { distributions: Vec::new(), set: String::default() }
     }
