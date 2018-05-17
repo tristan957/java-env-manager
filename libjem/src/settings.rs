@@ -1,9 +1,11 @@
 extern crate serde;
 extern crate serde_json;
 
+use std::cell::RefCell;
 use std::env;
 use std::error::Error;
 use std::ffi::{OsStr, OsString};
+use std::fmt;
 use std::fs;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -19,8 +21,22 @@ pub struct Settings {
 }
 
 impl Distribution {
+    pub fn get_name(&self) -> &str {
+        self.name.as_ref()
+    }
+
+    pub fn get_path(&self) -> &OsStr {
+        self.path.as_ref()
+    }
+
     pub fn new(name: &str, path: &OsStr) -> Distribution {
         Distribution { name: String::from(name), path: OsString::from(path) }
+    }
+}
+
+impl fmt::Display for Distribution {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {:?})", self.name, self.path)
     }
 }
 
@@ -41,12 +57,20 @@ impl Settings {
         Ok(s)
     }
 
+    pub fn get_distributions(&mut self) -> &mut Vec<Distribution> {
+        self.distributions.as_mut()
+    }
+
     pub fn get_program_dir() -> Option<OsString> {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::home_dir().map(|path| {
                 path.join(".java-env-manager").into()
             })
         })
+    }
+
+    pub fn get_set(&self) -> &str {
+        self.set.as_ref()
     }
 
     pub fn location() -> Option<OsString> {
@@ -62,10 +86,15 @@ impl Settings {
     pub fn set(&self) -> Result<(), Box<Error>> {
         let path = Settings::location().ok_or("Location not found")?;
         let file = fs::OpenOptions::new()
+            .truncate(true)
             .write(true)
             .open(path)?;
-        serde_json::to_writer_pretty(&file, &self)?;
+        serde_json::to_writer_pretty(file, &self)?;
 
         Ok(())
+    }
+
+    pub fn set_set(&mut self, name: &str) {
+        self.set = String::from(name);
     }
 }

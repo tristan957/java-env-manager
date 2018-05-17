@@ -2,8 +2,14 @@
 extern crate serde_derive;
 
 pub mod add;
+pub mod doctor;
 pub mod init;
+pub mod list;
+pub mod remove;
+pub mod set;
 pub mod settings;
+pub mod version;
+pub mod which;
 
 #[cfg(test)]
 mod tests {

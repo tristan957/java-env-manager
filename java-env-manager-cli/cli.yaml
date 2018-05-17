@@ -48,6 +48,7 @@ subcommands:
             short: n
             long: name
             help: The Java version to remove
+            takes_value: true
   - set:
       about: Set the current Java version
       args:
@@ -55,6 +56,7 @@ subcommands:
             short: n
             long: name
             help: The Java version to set as active
+            takes_value: true
   - update:
       about: Update the path a name points to
       args:
