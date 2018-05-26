@@ -1,4 +1,5 @@
-.env
-/target
 **/*.rs.bk
+.env
 .java-env-manager/
+.vscode/
+target/
