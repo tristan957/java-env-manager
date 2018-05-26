@@ -10,7 +10,7 @@ pub fn set(name: &str) -> Result<bool, Box<Error>> {
         }
     }
     settings.set_set(name);
-    settings.set()?;
+    settings.save()?;
     
     Ok(true)
 }

@@ -86,7 +86,7 @@ impl Settings {
         }
     }
 
-    pub fn set(&self) -> Result<(), Box<Error>> {
+    pub fn save(&self) -> Result<(), Box<Error>> {
         let path = Settings::location().ok_or("Location not found")?;
         let file = fs::OpenOptions::new()
             .truncate(true)
