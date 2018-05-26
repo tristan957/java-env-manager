@@ -9,6 +9,7 @@ use libjem::init::init;
 use libjem::remove::remove;
 use libjem::set::set;
 use libjem::settings::Settings;
+use libjem::version::version;
 
 fn main() -> Result<(), Box<Error>> {
     let yaml = load_yaml!("../cli.yaml");
@@ -78,7 +79,12 @@ fn main() -> Result<(), Box<Error>> {
             println!("update");
         },
         ("version", Some(_version_matches)) => {
-            println!("version");
+            match version() {
+                Some(distro) => println!("{} ({})", distro.get_name(), distro.get_path()
+                    .to_str()
+                    .unwrap_or("Unable to display path")),
+                None => println!("No distribution set")
+            }
         },
         ("which", Some(_which_matches)) => {
             // which().ok_or("Hello World")
