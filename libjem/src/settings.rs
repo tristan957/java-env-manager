@@ -1,14 +1,13 @@
 extern crate serde;
 extern crate serde_json;
 
-use std::cell::RefCell;
 use std::env;
 use std::error::Error;
 use std::ffi::{OsStr, OsString};
 use std::fmt;
 use std::fs;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Distribution {
     name: String,
     path: OsString,
@@ -57,7 +56,11 @@ impl Settings {
         Ok(s)
     }
 
-    pub fn get_distributions(&mut self) -> &mut Vec<Distribution> {
+    pub fn get_distributions(&self) -> Vec<Distribution> {
+        self.distributions.clone()
+    }
+
+    pub fn get_distributions_as_mut(&mut self) -> &mut Vec<Distribution> {
         self.distributions.as_mut()
     }
 

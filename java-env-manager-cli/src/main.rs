@@ -6,9 +6,9 @@ use clap::App;
 use std::error::Error;
 use libjem::add::add;
 use libjem::init::init;
-// use libjem::list::list;
 use libjem::remove::remove;
 use libjem::set::set;
+use libjem::settings::Settings;
 
 fn main() -> Result<(), Box<Error>> {
     let yaml = load_yaml!("../cli.yaml");
@@ -39,17 +39,22 @@ fn main() -> Result<(), Box<Error>> {
             }
         },
         ("list", Some(_list_matches)) => {
-            // match list() {
-            //     Ok(distros) => {
-            //         for distro in distros {
-            //             println!("{}", distro);
-            //         }
-            //     },
-            //     Err(e) => {
-            //         eprintln!("Unable to list distributions");
-            //         return Err(e)
-            //     }
-            // }
+            match Settings::get() {
+                Ok(settings) => {
+                    for distro in settings.get_distributions() {
+                        let name = distro.get_name();
+                        if name == settings.get_set() {
+                            println!("* {}", name)
+                        } else {
+                            println!("  {}", name);
+                        }
+                    }
+                },
+                Err(e) => {
+                    eprintln!("Unable to list distributions");
+                    return Err(e)
+                }
+            }
         },
         ("remove", Some(remove_matches)) => {
             let name = remove_matches.value_of("name").expect("remove requires a name\nUSAGE: java-env-manager remove --name <name> --path <path>");
