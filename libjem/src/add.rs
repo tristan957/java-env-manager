@@ -1,6 +1,6 @@
+use settings::{Distribution, Settings};
 use std::error::Error;
 use std::ffi::OsStr;
-use settings::{Distribution, Settings};
 
 pub fn add(name: &str, path: &OsStr) -> Result<(), Box<Error>> {
     let mut settings = Settings::get()?;

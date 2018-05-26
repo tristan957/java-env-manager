@@ -29,7 +29,10 @@ impl Distribution {
     }
 
     pub fn new(name: &str, path: &OsStr) -> Distribution {
-        Distribution { name: String::from(name), path: OsString::from(path) }
+        Distribution {
+            name: String::from(name),
+            path: OsString::from(path),
+        }
     }
 }
 
@@ -45,7 +48,10 @@ impl Settings {
     }
 
     pub fn default() -> Settings {
-        Settings { distributions: Vec::new(), set: String::default() }
+        Settings {
+            distributions: Vec::new(),
+            set: String::default(),
+        }
     }
 
     pub fn get() -> Result<Settings, Box<Error>> {
@@ -65,11 +71,8 @@ impl Settings {
     }
 
     pub fn get_program_dir() -> Option<OsString> {
-        env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
-            env::home_dir().map(|path| {
-                path.join(".java-env-manager").into()
-            })
-        })
+        env::var_os("JAVA_ENV_MANAGER_HOME")
+            .or_else(|| env::home_dir().map(|path| path.join(".java-env-manager").into()))
     }
 
     pub fn get_set(&self) -> &str {
@@ -81,8 +84,8 @@ impl Settings {
             Some(mut os) => {
                 os.push("/settings.json");
                 Option::from(os)
-            },
-            None => Option::default()
+            }
+            None => Option::default(),
         }
     }
 

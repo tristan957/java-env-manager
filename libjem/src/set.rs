@@ -1,22 +1,23 @@
 use std::error::Error;
 use std::os::unix;
 // use std::os::windows;
-use std::ffi::OsString;
-use std::path::Path;
-use std::fs;
 use settings::Settings;
+use std::ffi::OsString;
+use std::fs;
+use std::path::Path;
 
 pub fn set(name: &str) -> Result<bool, Box<Error>> {
     let mut settings = Settings::get()?;
     let mut path = OsString::default();
     {
         let distros = settings.get_distributions();
-        if distros.into_iter().any(|d| { 
-                path = OsString::from(d.get_path());
-                path.push("/bin");
-                name == d.get_name()
-            }) == false {
-            return Ok(false)
+        if distros.into_iter().any(|d| {
+            path = OsString::from(d.get_path());
+            path.push("/bin");
+            name == d.get_name()
+        }) == false
+        {
+            return Ok(false);
         }
     }
 
@@ -34,6 +35,6 @@ pub fn set(name: &str) -> Result<bool, Box<Error>> {
 
     settings.set_set(name);
     settings.save()?;
-    
+
     Ok(true)
 }
