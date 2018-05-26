@@ -18,7 +18,7 @@ pub fn init() -> Result<(), Box<Error>> {
     fs::create_dir(&program_dir)?;
     program_dir.push("/settings.json");
     fs::File::create(&program_dir)?;
-    Settings::default().set()?;
+    Settings::default().save()?;
 
     Ok(())
 }

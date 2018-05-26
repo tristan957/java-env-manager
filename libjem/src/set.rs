@@ -9,6 +9,9 @@ pub fn set(name: &str) -> Result<bool, Box<Error>> {
             return Ok(false)
         }
     }
+
+    // TODO actually create the symlink here
+
     settings.set_set(name);
     settings.save()?;
     
