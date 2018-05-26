@@ -1,17 +1,12 @@
 name: java-env-manager
 version: "0.0.1"
 author: Tristan Partin <tristan.partin@gmail.com>
-about: Like NVM (Node Version Manager) for Java
+about: Version manager for Java
 args:
   - debug:
       short: d
       long: debug
       help: Send debug messages to standard out
-  - location:
-      short: l
-      long: location
-      help: If you aren't using the default location ($HOME/.java-env-manager) or have an environment variable set (JAVA_ENV_MANAGER_HOME), you can specify a custom location
-      takes_value: true
   - version:
       short: v
       long: version

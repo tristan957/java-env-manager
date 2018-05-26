@@ -36,6 +36,7 @@ fn main() -> Result<(), Box<Error>> {
         }
         ("help", Some(_help_matches)) => {
             app_clone.print_help()?;
+            println!();
         }
         ("init", Some(_init_matches)) => {
             if let Err(e) = init() {
@@ -96,8 +97,14 @@ fn main() -> Result<(), Box<Error>> {
         ("which", Some(_which_matches)) => {
             // which().ok_or("Hello World")
         }
-        ("", None) => app_clone.print_help()?,
-        _ => app_clone.print_help()?,
+        ("", None) => {
+            app_clone.print_help()?;
+            println!();
+        }
+        _ => {
+            app_clone.print_help()?;
+            println!();
+        }
     }
 
     Ok(())
