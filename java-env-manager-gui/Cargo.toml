@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Tristan Partin <tristan.partin@gmail.com>"]
 
 [dependencies]
-gtk = "0.4.0"
+gtk = "0.4"
 libjem = {path = "../libjem"}

@@ -5,3 +5,5 @@ RUN apt-get update; \
         libgtk-3-dev \
         ; \
     rm -rf /var/lib/apt/lists/*;
+
+CMD [ "rustc", "--version" ]

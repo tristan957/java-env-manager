@@ -1,20 +1,30 @@
 image: tristan957/jem-ci:latest
 
-cache:
-  paths:
-  - target/
-
 stages:
   - build
   - test
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
 
 build-cli:
   stage: build
   script:
     - cd $CI_PROJECT_DIR/java-env-manager-cli
     - cargo build
+  cache:
+    key: cli
+    paths:
+    - $CI_PROJECT_DIR/target
+    - $CARGO_HOME/registry
+
 build-gui:
   stage: build
   script:
     - cd $CI_PROJECT_DIR/java-env-manager-gui
     - cargo build
+  cache:
+    key: gui
+    paths:
+    - $CI_PROJECT_DIR/target
+    - $CARGO_HOME/registry
