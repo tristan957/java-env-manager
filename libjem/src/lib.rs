@@ -13,7 +13,6 @@ pub mod version;
 pub mod which;
 
 #[cfg(test)]
-
 mod tests {
     #[test]
     fn it_works() {

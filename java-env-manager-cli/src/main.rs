@@ -11,6 +11,7 @@ use libjem::{
     set::set,
     settings::Settings,
     version::version,
+    which::which,
 };
 use std::error::Error;
 
@@ -102,8 +103,9 @@ fn main() -> Result<(), Box<Error>> {
             ),
             None => println!("No distribution set"),
         },
-        ("which", Some(_which_matches)) => {
-            // which().ok_or("Hello World")
+        ("which", Some(_which_matches)) => match which() {
+            Some(p) => println!("{}", p.to_str().unwrap_or("Unable to display path")),
+            None => println!("No distribution set"),
         },
         ("", None) => {
             app_clone.print_help()?;

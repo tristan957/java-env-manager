@@ -6,12 +6,12 @@ pub fn version() -> Option<Distribution> {
             let name = settings.get_set();
             for distro in settings.get_distributions() {
                 if distro.get_name() == name {
-                    return Option::from(distro.clone())
+                    return Some(distro.clone())
                 }
             }
         },
-        Err(_) => return Option::default(),
+        Err(_) => return None,
     }
 
-    Option::default()
+    None
 }

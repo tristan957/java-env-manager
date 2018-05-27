@@ -10,14 +10,12 @@ use std::{
 };
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-
 pub struct Distribution {
     name: String,
     path: OsString,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-
 pub struct Settings {
     distributions: Vec<Distribution>,
     set:           String,
@@ -87,21 +85,18 @@ impl Settings {
         match Settings::get_program_dir() {
             Some(mut os) => {
                 os.push("/settings.json");
-
-                Option::from(os)
+                Some(os)
             },
-            None => Option::default(),
+            None => None,
         }
     }
 
     pub fn save(&self) -> Result<(), Box<Error>> {
         let path = Settings::location().ok_or("Location not found")?;
-
         let file = fs::OpenOptions::new()
             .truncate(true)
             .write(true)
             .open(path)?;
-
         serde_json::to_writer_pretty(file, &self)?;
 
         Ok(())

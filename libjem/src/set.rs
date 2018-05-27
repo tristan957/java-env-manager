@@ -1,8 +1,8 @@
 use std::{error::Error, os::unix};
 
-// use std::os::windows;
 use settings::Settings;
 use std::{ffi::OsString, fs, path::Path};
+// use std::os::windows;
 
 pub fn set(name: &str) -> Result<bool, Box<Error>> {
     let mut settings = Settings::get()?;
