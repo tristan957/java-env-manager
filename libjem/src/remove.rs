@@ -10,5 +10,6 @@ pub fn remove(name: &str) -> Result<(), Box<Error>> {
             .position(|d| name == d.get_name())
             .map(|p| distros.remove(p));
     }
+
     settings.save()
 }

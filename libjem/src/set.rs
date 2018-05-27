@@ -1,10 +1,8 @@
-use std::error::Error;
-use std::os::unix;
+use std::{error::Error, os::unix};
+
 // use std::os::windows;
 use settings::Settings;
-use std::ffi::OsString;
-use std::fs;
-use std::path::Path;
+use std::{ffi::OsString, fs, path::Path};
 
 pub fn set(name: &str) -> Result<bool, Box<Error>> {
     let mut settings = Settings::get()?;
@@ -17,7 +15,7 @@ pub fn set(name: &str) -> Result<bool, Box<Error>> {
             name == d.get_name()
         }) == false
         {
-            return Ok(false);
+            return Ok(false)
         }
     }
 

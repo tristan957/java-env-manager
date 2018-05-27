@@ -1,22 +1,26 @@
 extern crate serde;
 extern crate serde_json;
 
-use std::env;
-use std::error::Error;
-use std::ffi::{OsStr, OsString};
-use std::fmt;
-use std::fs;
+use std::{
+    env,
+    error::Error,
+    ffi::{OsStr, OsString},
+    fmt,
+    fs,
+};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+
 pub struct Distribution {
     name: String,
     path: OsString,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+
 pub struct Settings {
     distributions: Vec<Distribution>,
-    set: String,
+    set:           String,
 }
 
 impl Distribution {
@@ -50,7 +54,7 @@ impl Settings {
     pub fn default() -> Settings {
         Settings {
             distributions: Vec::new(),
-            set: String::default(),
+            set:           String::default(),
         }
     }
 
@@ -83,18 +87,21 @@ impl Settings {
         match Settings::get_program_dir() {
             Some(mut os) => {
                 os.push("/settings.json");
+
                 Option::from(os)
-            }
+            },
             None => Option::default(),
         }
     }
 
     pub fn save(&self) -> Result<(), Box<Error>> {
         let path = Settings::location().ok_or("Location not found")?;
+
         let file = fs::OpenOptions::new()
             .truncate(true)
             .write(true)
             .open(path)?;
+
         serde_json::to_writer_pretty(file, &self)?;
 
         Ok(())

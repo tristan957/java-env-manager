@@ -1,12 +1,9 @@
-use std::error::Error;
-use std::fs;
-use std::path::Path;
+use std::{error::Error, fs, path::Path};
 
 use settings::Settings;
 
 pub fn init() -> Result<(), Box<Error>> {
     let mut program_dir = Settings::get_program_dir().expect("No program directory found");
-
     if Path::new(&program_dir).exists() {
         println!(
             "{} already exists",
@@ -15,7 +12,8 @@ pub fn init() -> Result<(), Box<Error>> {
                 Err(_) => String::from("Directory"),
             }
         );
-        return Ok(());
+
+        return Ok(())
     }
 
     fs::create_dir(&program_dir)?;
