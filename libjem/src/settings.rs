@@ -1,9 +1,9 @@
 extern crate serde;
 extern crate serde_json;
 
+use error::{Error, ErrorKind};
 use std::{
     env,
-    error::Error,
     ffi::{OsStr, OsString},
     fmt,
     fs,
@@ -30,7 +30,7 @@ impl Distribution {
         self.path.as_ref()
     }
 
-    pub fn new(name: &str, path: &OsStr) -> Distribution {
+    pub fn new(name: &str, path: &OsStr) -> Self {
         Distribution {
             name: String::from(name),
             path: OsString::from(path),
@@ -53,19 +53,19 @@ impl Settings {
         self.distributions.push(distro);
     }
 
-    pub fn default() -> Settings {
+    pub fn default() -> Self {
         Settings {
             distributions: Vec::new(),
             set:           String::default(),
         }
     }
 
-    pub fn get() -> Result<Settings, Box<Error>> {
-        let path = Settings::location().ok_or("Location not found")?;
+    pub fn get() -> Result<Settings, Error> {
+        let path = Settings::location().ok_or_else(|| Error::new(ErrorKind::SettingsReadFailure))?;
         let file = fs::File::open(path)?;
-        let s = serde_json::from_reader(file)?;
+        let settings = serde_json::from_reader(file)?;
 
-        Ok(s)
+        Ok(settings)
     }
 
     pub fn get_distributions(&self) -> Vec<Distribution> {
@@ -95,8 +95,8 @@ impl Settings {
         }
     }
 
-    pub fn save(&self) -> Result<(), Box<Error>> {
-        let path = Settings::location().ok_or("Location not found")?;
+    pub fn save(&self) -> Result<(), Error> {
+        let path = Settings::location().ok_or_else(|| Error::new(ErrorKind::SettingsReadFailure))?;
         let file = fs::OpenOptions::new()
             .truncate(true)
             .write(true)

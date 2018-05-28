@@ -1,23 +1,20 @@
+use error::{Error, ErrorKind};
 use settings::Settings;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
 
-pub fn which() -> Option<PathBuf> {
-    match Settings::get_program_dir() {
-        Some(mut program_dir) => {
-            program_dir.push("/bin");
-            let path = Path::new(&program_dir);
-            if path.exists() {
-                match fs::read_link(path) {
-                    Ok(p) => return Some(p),
-                    Err(_) => return None,
-                }
-            }
-        },
-        None => return None,
+pub fn which() -> Result<PathBuf, Error> {
+    let mut program_dir =
+        Settings::get_program_dir().ok_or_else(|| Error::new(ErrorKind::SettingsNotFound))?;
+    program_dir.push("/bin");
+
+    let path = Path::new(&program_dir);
+    if path.exists() {
+        let pathbuf = fs::read_link(path)?;
+        return Ok(pathbuf)
     }
 
-    None
+    Err(Error::new(ErrorKind::BinariesNotFound))
 }

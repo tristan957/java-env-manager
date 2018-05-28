@@ -1,7 +1,7 @@
+use error::Error;
 use settings::Settings;
-use std::error::Error;
 
-pub fn remove(name: &str) -> Result<(), Box<Error>> {
+pub fn remove(name: &str) -> Result<(), Error> {
     let mut settings = Settings::get()?;
     {
         let distros = settings.get_distributions_as_mut();

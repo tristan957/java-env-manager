@@ -1,8 +1,8 @@
 use error::{Error, ErrorKind};
 use settings::Settings;
-use std::{error, ffi::OsStr};
+use std::ffi::OsStr;
 
-pub fn update(name: &str, path: &OsStr) -> Result<(), Box<error::Error>> {
+pub fn update(name: &str, path: &OsStr) -> Result<(), Error> {
     let mut settings = Settings::get()?;
     let mut name_found = false;
     {
@@ -15,11 +15,8 @@ pub fn update(name: &str, path: &OsStr) -> Result<(), Box<error::Error>> {
     }
 
     if name_found {
-        match settings.save() {
-            Ok(_) => return Ok(()),
-            Err(e) => return Err(e),
-        }
+        return settings.save()
     }
 
-    Err(Box::new(Error::new(ErrorKind::NameNotFound)))
+    Err(Error::new(ErrorKind::NameNotFound))
 }

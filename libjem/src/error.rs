@@ -1,15 +1,47 @@
-use std::{error, fmt};
+// extern crate serde;
+extern crate serde_json;
+
+use std::{error, fmt, io};
+// use self::serde_json;
 
 // pub type Result<T> = result::Result<T, Error>;
 
 #[derive(Debug)]
 pub struct Error {
-    kind: ErrorKind,
+    kind:        ErrorKind,
+    description: &'static str,
 }
 
 impl Error {
-    pub fn new(kind: ErrorKind) -> Error {
-        Error { kind }
+    pub fn description(&self) -> &str {
+        self.description
+    }
+
+    pub fn kind(&self) -> ErrorKind {
+        self.kind
+    }
+
+    pub fn new_with_desc(kind: ErrorKind, description: &'static str) -> Self {
+        Error { kind, description }
+    }
+
+    pub fn new(kind: ErrorKind) -> Self {
+        Error {
+            kind,
+            description: kind.as_str(),
+        }
+    }
+}
+
+impl From<io::Error> for Error {
+    fn from(_e: io::Error) -> Self {
+        Error::new(ErrorKind::IoError)
+    }
+}
+
+impl From<serde_json::Error> for Error {
+    fn from(_e: serde_json::Error) -> Self {
+        Error::new(ErrorKind::SerdeError)
     }
 }
 
@@ -21,19 +53,21 @@ impl fmt::Display for Error {
 
 impl error::Error for Error {
     fn description(&self) -> &str {
-        self.kind.as_str()
-    }
-
-    fn cause(&self) -> Option<&error::Error> {
-        None
+        self.description
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum ErrorKind {
-    InvalidSettings,
+    BinariesNotFound,
+    IoError,
     NameNotFound,
+    PathExists,
     PathNotFound,
+    SerdeError,
+    SettingsNotFound,
+    SettingsReadFailure,
+    SettingsWriteFailure,
 
     #[doc(hidden)]
     __Nonexhaustive,
@@ -42,9 +76,15 @@ pub enum ErrorKind {
 impl ErrorKind {
     fn as_str(&self) -> &'static str {
         match *self {
-            ErrorKind::InvalidSettings => "invalid settings found",
+            ErrorKind::BinariesNotFound => "bin folder not found",
+            ErrorKind::IoError => "unable to perform I/O",
             ErrorKind::NameNotFound => "distribution name not found",
+            ErrorKind::PathExists => "path exists",
             ErrorKind::PathNotFound => "path not found",
+            ErrorKind::SerdeError => "unable to serialize/deserialize settings",
+            ErrorKind::SettingsNotFound => "settings not found",
+            ErrorKind::SettingsReadFailure => "failed to read settings",
+            ErrorKind::SettingsWriteFailure => "failed to write settings",
             ErrorKind::__Nonexhaustive => unreachable!(),
         }
     }

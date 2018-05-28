@@ -15,9 +15,8 @@ use libjem::{
     version::version,
     which::which,
 };
-use std::error;
 
-fn main() -> Result<(), Box<error::Error>> {
+fn main() -> Result<(), Error> {
     let yaml = load_yaml!("../cli.yaml");
     let app = App::from_yaml(yaml);
     let mut app_clone = app.clone();
@@ -46,7 +45,9 @@ fn main() -> Result<(), Box<error::Error>> {
             println!("doctor");
         },
         ("help", Some(_help_matches)) => {
-            app_clone.print_help()?;
+            app_clone
+                .print_help()
+                .expect("Unable to print help information");
             println!();
         },
         ("init", Some(_init_matches)) => {
@@ -87,10 +88,9 @@ fn main() -> Result<(), Box<error::Error>> {
             );
 
             match set(name) {
-                Ok(true) => {},
-                Ok(false) => println!("Name does not exist in list of distributions"),
+                Ok(_) => {},
                 Err(e) => {
-                    eprintln!("Unable to change settings");
+                    eprintln!("Unable to change settings: {}", e.description());
                     return Err(e)
                 },
             }
@@ -114,7 +114,7 @@ fn main() -> Result<(), Box<error::Error>> {
             }
         },
         ("version", Some(_version_matches)) => match version() {
-            Some(distro) => println!(
+            Ok(distro) => println!(
                 "{} ({})",
                 distro.get_name(),
                 distro
@@ -122,18 +122,28 @@ fn main() -> Result<(), Box<error::Error>> {
                     .to_str()
                     .unwrap_or("Unable to display path")
             ),
-            None => println!("No distribution set"),
+            Err(e) => {
+                println!("No distribution set");
+                return Err(e)
+            },
         },
         ("which", Some(_which_matches)) => match which() {
-            Some(p) => println!("{}", p.to_str().unwrap_or("Unable to display path")),
-            None => println!("No distribution set"),
+            Ok(p) => println!("{}", p.to_str().unwrap_or("Unable to display path")),
+            Err(e) => {
+                println!("No distribution set");
+                return Err(e)
+            },
         },
         ("", None) => {
-            app_clone.print_help()?;
+            app_clone
+                .print_help()
+                .expect("Unable to print help information");
             println!();
         },
         _ => {
-            app_clone.print_help()?;
+            app_clone
+                .print_help()
+                .expect("Unable to print help information");
             println!();
         },
     }

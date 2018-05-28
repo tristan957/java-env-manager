@@ -1,9 +1,9 @@
 use error::{Error, ErrorKind};
 use settings::Settings;
-use std::{error, ffi::OsString, fs, os::unix, path::Path};
+use std::{ffi::OsString, fs, os::unix, path::Path};
 // use std::os::windows;
 
-pub fn set(name: &str) -> Result<bool, Box<error::Error>> {
+pub fn set(name: &str) -> Result<(), Error> {
     let mut settings = Settings::get()?;
     let mut path: Option<OsString> = None;
 
@@ -16,13 +16,11 @@ pub fn set(name: &str) -> Result<bool, Box<error::Error>> {
     }
 
     if path.is_none() {
-        return Ok(false)
+        return Err(Error::new(ErrorKind::NameNotFound))
     }
 
-    let mut program_dir = match Settings::get_program_dir() {
-        Some(p) => p,
-        None => return Err(Box::new(Error::new(ErrorKind::InvalidSettings))),
-    };
+    let mut program_dir =
+        Settings::get_program_dir().ok_or_else(|| Error::new(ErrorKind::SettingsNotFound))?;
     program_dir.push("/bin");
     if Path::new(&program_dir).exists() {
         fs::remove_dir(&program_dir)?;
@@ -35,7 +33,5 @@ pub fn set(name: &str) -> Result<bool, Box<error::Error>> {
     }
 
     settings.set_set(name);
-    settings.save()?;
-
-    Ok(true)
+    settings.save()
 }
