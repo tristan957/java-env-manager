@@ -1,24 +1,28 @@
-use std::{error::Error, os::unix};
-
+use error::{Error, ErrorKind};
 use settings::Settings;
-use std::{ffi::OsString, fs, path::Path};
+use std::{error, ffi::OsString, fs, os::unix, path::Path};
 // use std::os::windows;
 
-pub fn set(name: &str) -> Result<bool, Box<Error>> {
+pub fn set(name: &str) -> Result<bool, Box<error::Error>> {
     let mut settings = Settings::get()?;
-    let mut path = OsString::default();
+    let mut path: Option<OsString> = None;
 
-    let distros = settings.get_distributions();
-    if distros.into_iter().any(|d| {
-        path = OsString::from(d.get_path());
-        path.push("/bin");
-        name == d.get_name()
-    }) == false
-    {
+    for distro in settings.get_distributions() {
+        if name == distro.get_name() {
+            let mut p = OsString::from(distro.get_path());
+            p.push("/bin");
+            path = Some(p);
+        }
+    }
+
+    if path.is_none() {
         return Ok(false)
     }
 
-    let mut program_dir = Settings::get_program_dir().unwrap_or_default();
+    let mut program_dir = match Settings::get_program_dir() {
+        Some(p) => p,
+        None => return Err(Box::new(Error::new(ErrorKind::InvalidSettings))),
+    };
     program_dir.push("/bin");
     if Path::new(&program_dir).exists() {
         fs::remove_dir(&program_dir)?;
@@ -27,7 +31,7 @@ pub fn set(name: &str) -> Result<bool, Box<Error>> {
     if cfg!(target_os = "windows") {
         // windows::fs::symlink_dir(&path, &program_dir)?;
     } else {
-        unix::fs::symlink(&path, &program_dir)?;
+        unix::fs::symlink(path.unwrap(), &program_dir)?;
     }
 
     settings.set_set(name);

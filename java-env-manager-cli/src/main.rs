@@ -6,6 +6,7 @@ extern crate libjem;
 use clap::App;
 use libjem::{
     add::add,
+    error::Error,
     init::init,
     remove::remove,
     set::set,
@@ -14,19 +15,16 @@ use libjem::{
     version::version,
     which::which,
 };
-use std::{error::Error};
+use std::error;
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<error::Error>> {
     let yaml = load_yaml!("../cli.yaml");
     let app = App::from_yaml(yaml);
     let mut app_clone = app.clone();
 
     let matches = app.get_matches();
     if matches.is_present("version") {
-        println!(
-            "Java Environment Manager -- {}",
-            env!("CARGO_PKG_VERSION")
-        );
+        println!("Java Environment Manager -- {}", env!("CARGO_PKG_VERSION"));
         return Ok(())
     }
 
@@ -74,10 +72,9 @@ fn main() -> Result<(), Box<Error>> {
             },
         },
         ("remove", Some(remove_matches)) => {
-            let name = remove_matches.value_of("name").expect(
-                "remove requires a name\nUSAGE: java-env-manager remove --name <name> --path \
-                 <path>",
-            );
+            let name = remove_matches
+                .value_of("name")
+                .expect("remove requires a name\nUSAGE: java-env-manager remove --name <name>");
 
             if let Err(e) = remove(name) {
                 eprintln!("Unable to remove distribution");
