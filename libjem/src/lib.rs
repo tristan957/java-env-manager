@@ -4,6 +4,7 @@ extern crate serde_derive;
 
 pub mod add;
 pub mod doctor;
+pub mod error;
 pub mod init;
 pub mod remove;
 pub mod set;

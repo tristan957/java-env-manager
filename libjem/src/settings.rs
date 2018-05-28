@@ -36,6 +36,10 @@ impl Distribution {
             path: OsString::from(path),
         }
     }
+
+    pub fn set_path(&mut self, path: &OsStr) {
+        self.path = OsString::from(path);
+    }
 }
 
 impl fmt::Display for Distribution {

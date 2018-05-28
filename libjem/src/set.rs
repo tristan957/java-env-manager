@@ -7,16 +7,15 @@ use std::{ffi::OsString, fs, path::Path};
 pub fn set(name: &str) -> Result<bool, Box<Error>> {
     let mut settings = Settings::get()?;
     let mut path = OsString::default();
+
+    let distros = settings.get_distributions();
+    if distros.into_iter().any(|d| {
+        path = OsString::from(d.get_path());
+        path.push("/bin");
+        name == d.get_name()
+    }) == false
     {
-        let distros = settings.get_distributions();
-        if distros.into_iter().any(|d| {
-            path = OsString::from(d.get_path());
-            path.push("/bin");
-            name == d.get_name()
-        }) == false
-        {
-            return Ok(false)
-        }
+        return Ok(false)
     }
 
     let mut program_dir = Settings::get_program_dir().unwrap_or_default();

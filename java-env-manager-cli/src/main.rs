@@ -10,10 +10,11 @@ use libjem::{
     remove::remove,
     set::set,
     settings::Settings,
+    update::update,
     version::version,
     which::which,
 };
-use std::error::Error;
+use std::{error::Error};
 
 fn main() -> Result<(), Box<Error>> {
     let yaml = load_yaml!("../cli.yaml");
@@ -21,6 +22,14 @@ fn main() -> Result<(), Box<Error>> {
     let mut app_clone = app.clone();
 
     let matches = app.get_matches();
+    if matches.is_present("version") {
+        println!(
+            "Java Environment Manager -- {}",
+            env!("CARGO_PKG_VERSION")
+        );
+        return Ok(())
+    }
+
     match matches.subcommand() {
         ("add", Some(add_matches)) => {
             let name = add_matches.value_of("name").expect(
@@ -77,20 +86,35 @@ fn main() -> Result<(), Box<Error>> {
         },
         ("set", Some(set_matches)) => {
             let name = set_matches.value_of("name").expect(
-                "set requires a name\nUSAGE: java-env-manager remove --name <name> --path <path>",
+                "set requires a name\nUSAGE: java-env-manager set --name <name> --path <path>",
             );
 
             match set(name) {
                 Ok(true) => {},
-                Ok(false) => eprintln!("Name does not exist in list of distributions"),
+                Ok(false) => println!("Name does not exist in list of distributions"),
                 Err(e) => {
                     eprintln!("Unable to change settings");
                     return Err(e)
                 },
             }
         },
-        ("update", Some(_update_matches)) => {
-            println!("update");
+        ("update", Some(update_matches)) => {
+            let name = update_matches.value_of("name").expect(
+                "update requires a name\nUSAGE: java-env-manager update --name <name> --path \
+                 <path>",
+            );
+            let path = update_matches.value_of_os("path").expect(
+                "update requires a path\nUSAGE: java-env-manager update --name <name> --path \
+                 <path>",
+            );
+
+            if let Err(_e) = update(name, path) {
+                eprintln!(
+                    "Failed to update {} with path {}",
+                    name,
+                    path.to_str().unwrap_or("[path failed to display]")
+                );
+            }
         },
         ("version", Some(_version_matches)) => match version() {
             Some(distro) => println!(

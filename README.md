@@ -73,6 +73,7 @@ cargo test
 
 ## Roadmap to 1.0
 
-1. Creating the `doctor` command
-2. Complete unit testing
-3. Set up logging
+1. Use new Error type appropriately :/
+2. Creating the `doctor` command
+3. Complete unit testing
+4. Set up logging
