@@ -1,7 +1,7 @@
-use error::{Error, ErrorKind};
+use error::{Error, ErrorKind, Result};
 use settings::{Distribution, Settings};
 
-pub fn version() -> Result<Distribution, Error> {
+pub fn version() -> Result<Distribution> {
     let settings = Settings::get()?;
     let name = settings.get_set();
 

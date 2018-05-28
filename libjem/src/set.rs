@@ -1,9 +1,9 @@
-use error::{Error, ErrorKind};
+use error::{Error, ErrorKind, Result};
 use settings::Settings;
 use std::{ffi::OsString, fs, os::unix, path::Path};
 // use std::os::windows;
 
-pub fn set(name: &str) -> Result<(), Error> {
+pub fn set(name: &str) -> Result<()> {
     let mut settings = Settings::get()?;
     let mut path: Option<OsString> = None;
 

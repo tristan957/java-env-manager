@@ -1,10 +1,8 @@
-// extern crate serde;
 extern crate serde_json;
 
-use std::{error, fmt, io};
-// use self::serde_json;
+use std::{error, fmt, io, result};
 
-// pub type Result<T> = result::Result<T, Error>;
+pub type Result<T> = result::Result<T, Error>;
 
 #[derive(Debug)]
 pub struct Error {

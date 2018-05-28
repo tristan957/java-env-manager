@@ -1,8 +1,8 @@
-use error::{Error, ErrorKind};
+use error::{Error, ErrorKind, Result};
 use settings::Settings;
 use std::{fs, path::Path};
 
-pub fn init() -> Result<(), Error> {
+pub fn init() -> Result<()> {
     let mut program_dir = Settings::get_program_dir().expect("No program directory found");
     if Path::new(&program_dir).exists() {
         return Err(Error::new(ErrorKind::PathExists))

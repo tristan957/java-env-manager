@@ -1,7 +1,7 @@
 extern crate serde;
 extern crate serde_json;
 
-use error::{Error, ErrorKind};
+use error::{Error, ErrorKind, Result};
 use std::{
     env,
     ffi::{OsStr, OsString},
@@ -60,7 +60,7 @@ impl Settings {
         }
     }
 
-    pub fn get() -> Result<Settings, Error> {
+    pub fn get() -> Result<Settings> {
         let path = Settings::location().ok_or_else(|| Error::new(ErrorKind::SettingsReadFailure))?;
         let file = fs::File::open(path)?;
         let settings = serde_json::from_reader(file)?;
@@ -95,7 +95,7 @@ impl Settings {
         }
     }
 
-    pub fn save(&self) -> Result<(), Error> {
+    pub fn save(&self) -> Result<()> {
         let path = Settings::location().ok_or_else(|| Error::new(ErrorKind::SettingsReadFailure))?;
         let file = fs::OpenOptions::new()
             .truncate(true)

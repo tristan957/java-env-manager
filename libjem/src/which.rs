@@ -1,11 +1,11 @@
-use error::{Error, ErrorKind};
+use error::{Error, ErrorKind, Result};
 use settings::Settings;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
 
-pub fn which() -> Result<PathBuf, Error> {
+pub fn which() -> Result<PathBuf> {
     let mut program_dir =
         Settings::get_program_dir().ok_or_else(|| Error::new(ErrorKind::SettingsNotFound))?;
     program_dir.push("/bin");

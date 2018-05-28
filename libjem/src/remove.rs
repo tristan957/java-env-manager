@@ -1,7 +1,7 @@
-use error::Error;
+use error::Result;
 use settings::Settings;
 
-pub fn remove(name: &str) -> Result<(), Error> {
+pub fn remove(name: &str) -> Result<()> {
     let mut settings = Settings::get()?;
     {
         let distros = settings.get_distributions_as_mut();
