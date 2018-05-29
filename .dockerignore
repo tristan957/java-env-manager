@@ -1,0 +1,10 @@
+target/
+.env
+.gitignore
+.git/
+.gitlab-ci-yml
+LICENSE
+README.md
+.vscode/
+.java-env-manager/
+.gitlab/
