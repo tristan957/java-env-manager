@@ -7,26 +7,26 @@ pub type Result<T> = result::Result<T, Error>;
 #[derive(Debug)]
 pub struct Error {
     kind:        ErrorKind,
-    description: &'static str,
+    description: String,
 }
 
 impl Error {
     pub fn description(&self) -> &str {
-        self.description
+        self.description.as_str()
     }
 
     pub fn kind(&self) -> ErrorKind {
         self.kind
     }
 
-    pub fn new_with_desc(kind: ErrorKind, description: &'static str) -> Self {
+    pub fn new_with_desc(kind: ErrorKind, description: String) -> Self {
         Error { kind, description }
     }
 
     pub fn new(kind: ErrorKind) -> Self {
         Error {
             kind,
-            description: kind.as_str(),
+            description: String::from(kind.as_str()),
         }
     }
 }
@@ -51,13 +51,14 @@ impl fmt::Display for Error {
 
 impl error::Error for Error {
     fn description(&self) -> &str {
-        self.description
+        self.description.as_str()
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum ErrorKind {
     BinariesNotFound,
+    DuplicateNames,
     IoError,
     NameNotFound,
     PathExists,
@@ -75,6 +76,7 @@ impl ErrorKind {
     fn as_str(&self) -> &'static str {
         match *self {
             ErrorKind::BinariesNotFound => "bin folder not found",
+            ErrorKind::DuplicateNames => "duplicate names found",
             ErrorKind::IoError => "unable to perform I/O",
             ErrorKind::NameNotFound => "distribution name not found",
             ErrorKind::PathExists => "path exists",

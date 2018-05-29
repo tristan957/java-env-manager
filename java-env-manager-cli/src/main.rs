@@ -6,7 +6,8 @@ extern crate libjem;
 use clap::App;
 use libjem::{
     add::add,
-    error::Error,
+    doctor::doctor,
+    error::{Error, ErrorKind},
     init::init,
     remove::remove,
     set::set,
@@ -42,7 +43,51 @@ fn main() -> Result<(), Error> {
             }
         },
         ("doctor", Some(_doctor_matches)) => {
-            println!("doctor");
+            if let Err(e) = doctor() {
+                match e.kind() {
+                    ErrorKind::BinariesNotFound => {},
+                    ErrorKind::DuplicateNames => {
+                        eprintln!("{}", e.description());
+                        eprintln!(
+                            "Please run 'java-env-manager remove --name <name>' where name is the \
+                             name mentioned above"
+                        );
+                        eprintln!("Note: this will remove the first instance of the duplicate");
+                    },
+                    ErrorKind::IoError => {
+                        eprintln!("Unable to read/write to a file/directory");
+                        eprintln!(
+                            "Please check to make sure you have access and write permissions to \
+                             JAVA_ENV_MANAGER_HOME"
+                        );
+                    },
+                    ErrorKind::NameNotFound => {},
+                    ErrorKind::PathExists => {},
+                    ErrorKind::PathNotFound => {
+                        eprintln!("{}", e.description());
+                        eprintln!(
+                            "Please run 'java-env-manager update --name <name> --path <path>' \
+                             where name is the name mentioned above, and path is a legitimate \
+                             path on your file system"
+                        );
+                    },
+                    ErrorKind::SerdeError => {
+                        eprintln!("Unable to read settings.json");
+                        eprintln!("Please run 'java-env-manager init --force'");
+                        eprintln!("Note: this will destroy your current configuration");
+                    },
+                    ErrorKind::SettingsNotFound => {},
+                    ErrorKind::SettingsReadFailure => {
+                        eprintln!("Unable to read settings.json");
+                        eprintln!("Please run 'java-env-manager init --force'");
+                        eprintln!("Note: this will destroy your current configuration");
+                    },
+                    ErrorKind::SettingsWriteFailure => {},
+                    ErrorKind::__Nonexhaustive => unreachable!(),
+                }
+
+                return Err(e)
+            }
         },
         ("help", Some(_help_matches)) => {
             app_clone
