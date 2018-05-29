@@ -1,4 +1,5 @@
 [![pipeline status](https://gitlab.com/tristan957/java-env-manager/badges/master/pipeline.svg)](https://gitlab.com/tristan957/java-env-manager/commits/master)
+[![License Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-yellow.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Java Environment Manager
 
