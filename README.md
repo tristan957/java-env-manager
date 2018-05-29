@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.com/return0software/java-env-manager/badges/master/pipeline.svg)](https://gitlab.com/return0software/java-env-manager/commits/master)
+
 # Java Environment Manager
 
 A version manager for Java
