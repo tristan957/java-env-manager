@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/return0software/java-env-manager/badges/master/pipeline.svg)](https://gitlab.com/return0software/java-env-manager/commits/master)
+[![pipeline status](https://gitlab.com/tristan957/java-env-manager/badges/master/pipeline.svg)](https://gitlab.com/tristan957/java-env-manager/commits/master)
 
 # Java Environment Manager
 
