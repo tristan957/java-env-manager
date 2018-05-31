@@ -40,11 +40,19 @@ dynamically on a project-by-project basis.
 
 ### Commands
 
+For Debug:
+
 ```text
 cargo build
 ```
 
-Executables are located at `target/debug`.
+For Release:
+
+```text
+cargo build --release
+```
+
+Executables are located at `target/debug` or `target/release`.
 
 ```text
 USAGE:
@@ -76,7 +84,10 @@ cargo test
 
 ## Roadmap to 1.0
 
-1. Use new Error type appropriately :/
-2. Creating the `doctor` command
-3. Complete unit testing
-4. Set up logging
+1. Complete unit testing
+2. Set up logging
+
+## Further
+
+1. Finish GUI
+2. Check if it works on windows

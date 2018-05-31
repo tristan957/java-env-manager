@@ -1,5 +1,6 @@
 #![allow(unknown_lints)]
 #![allow(print_literal)] // clippy lint
+#![warn(unknown_lints)]
 #[macro_use]
 
 extern crate clap;
