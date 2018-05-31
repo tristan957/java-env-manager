@@ -98,7 +98,7 @@ impl Settings {
     pub fn get_program_dir() -> Option<OsString> {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::var_os("XDG_CONFIG_HOME")
-                .and_then(|mut path: OsString| {
+                .and_then(|mut path| {
                     path.push("/java-env-manager");
                     Some(path)
                 })
