@@ -1,3 +1,4 @@
+#![allow(unknown_lints)]
 #![allow(print_literal)] // clippy lint
 #[macro_use]
 

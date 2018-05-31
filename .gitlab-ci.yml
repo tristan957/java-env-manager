@@ -13,7 +13,7 @@ build-cli:
     - cd $CI_PROJECT_DIR/java-env-manager-cli
     - cargo build
   cache:
-    key: cli
+    key: "$env:CI_JOB_NAME"
     paths:
     - $CI_PROJECT_DIR/target
     - $CARGO_HOME/registry
@@ -24,7 +24,7 @@ build-gui:
     - cd $CI_PROJECT_DIR/java-env-manager-gui
     - cargo build
   cache:
-    key: gui
+    key: "$env:CI_JOB_NAME"
     paths:
     - $CI_PROJECT_DIR/target
     - $CARGO_HOME/registry
