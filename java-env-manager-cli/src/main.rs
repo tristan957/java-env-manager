@@ -52,8 +52,6 @@ fn main() -> Result<(), Error> {
         ("doctor", Some(_doctor_matches)) => {
             if let Err(e) = doctor() {
                 match e.kind() {
-                    ErrorKind::BinariesNotFound => {},
-                    ErrorKind::Custom => {},
                     ErrorKind::DuplicateNames => {
                         eprintln!("{}", e.description());
                         eprintln!(
@@ -69,8 +67,6 @@ fn main() -> Result<(), Error> {
                              JAVA_ENV_MANAGER_HOME"
                         );
                     },
-                    ErrorKind::NameNotFound => {},
-                    ErrorKind::PathExists => {},
                     ErrorKind::PathNotFound => {
                         eprintln!("{}", e.description());
                         eprintln!(
@@ -84,14 +80,13 @@ fn main() -> Result<(), Error> {
                         eprintln!("Please run 'java-env-manager init --force'");
                         eprintln!("Note: this will destroy your current configuration");
                     },
-                    ErrorKind::SettingsNotFound => {},
                     ErrorKind::SettingsReadFailure => {
                         eprintln!("Unable to read settings.json");
                         eprintln!("Please run 'java-env-manager init --force'");
                         eprintln!("Note: this will destroy your current configuration");
                     },
-                    ErrorKind::SettingsWriteFailure => {},
                     ErrorKind::__Nonexhaustive => unreachable!(),
+                    _ => {},
                 }
 
                 return Err(e)
