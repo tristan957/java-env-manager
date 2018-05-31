@@ -1,3 +1,4 @@
+#![allow(print_literal)] // clippy lint
 #[macro_use]
 
 extern crate clap;
@@ -30,12 +31,18 @@ fn main() -> Result<(), Error> {
 
     match matches.subcommand() {
         ("add", Some(add_matches)) => {
-            let name = add_matches.value_of("name").expect(
-                "add requires a name\nUSAGE: java-env-manager add --name <name> --path <path>",
-            );
-            let path = add_matches.value_of_os("path").expect(
-                "add requires a path\nUSAGE: java-env-manager add --name <name> --path <path>",
-            );
+            let name = add_matches.value_of("name").ok_or_else(|| {
+                eprintln!(
+                    "add requires a name\nUSAGE: java-env-manager add --name <name> --path <path>"
+                );
+                Error::new_with_desc(ErrorKind::Custom, "add requires a name")
+            })?;
+            let path = add_matches.value_of_os("path").ok_or_else(|| {
+                eprintln!(
+                    "add requires a path\nUSAGE: java-env-manager add --name <name> --path <path>"
+                );
+                Error::new_with_desc(ErrorKind::Custom, "add requires a path")
+            })?;
 
             if let Err(e) = add(name, path) {
                 eprintln!("Unable to add Java distribution");
@@ -46,6 +53,7 @@ fn main() -> Result<(), Error> {
             if let Err(e) = doctor() {
                 match e.kind() {
                     ErrorKind::BinariesNotFound => {},
+                    ErrorKind::Custom => {},
                     ErrorKind::DuplicateNames => {
                         eprintln!("{}", e.description());
                         eprintln!(
@@ -118,9 +126,10 @@ fn main() -> Result<(), Error> {
             },
         },
         ("remove", Some(remove_matches)) => {
-            let name = remove_matches
-                .value_of("name")
-                .expect("remove requires a name\nUSAGE: java-env-manager remove --name <name>");
+            let name = remove_matches.value_of("name").ok_or_else(|| {
+                eprintln!("remove requires a name\nUSAGE: java-env-manager remove --name <name>");
+                Error::new_with_desc(ErrorKind::Custom, "remove requires a name")
+            })?;
 
             if let Err(e) = remove(name) {
                 eprintln!("Unable to remove distribution");
@@ -128,34 +137,39 @@ fn main() -> Result<(), Error> {
             }
         },
         ("set", Some(set_matches)) => {
-            let name = set_matches.value_of("name").expect(
-                "set requires a name\nUSAGE: java-env-manager set --name <name> --path <path>",
-            );
+            let name = set_matches.value_of("name").ok_or_else(|| {
+                eprintln!("set requires a name\nUSAGE: java-env-manager set --name <name>");
+                Error::new_with_desc(ErrorKind::Custom, "set requires a name")
+            })?;
 
-            match set(name) {
-                Ok(_) => {},
-                Err(e) => {
-                    eprintln!("Unable to change settings: {}", e.description());
-                    return Err(e)
-                },
+            if let Err(e) = set(name) {
+                eprintln!("Unable to change settings: {}", e.description());
+                return Err(e)
             }
         },
         ("update", Some(update_matches)) => {
-            let name = update_matches.value_of("name").expect(
-                "update requires a name\nUSAGE: java-env-manager update --name <name> --path \
-                 <path>",
-            );
-            let path = update_matches.value_of_os("path").expect(
-                "update requires a path\nUSAGE: java-env-manager update --name <name> --path \
-                 <path>",
-            );
+            let name = update_matches.value_of("name").ok_or_else(|| {
+                eprintln!(
+                    "update requires a name\nUSAGE: java-env-manager update --name <name> --path \
+                     <path>"
+                );
+                Error::new_with_desc(ErrorKind::Custom, "update requires a name")
+            })?;
+            let path = update_matches.value_of_os("path").ok_or_else(|| {
+                eprintln!(
+                    "update requires a path\nUSAGE: java-env-manager update --name <name> --path \
+                     <path>"
+                );
+                Error::new_with_desc(ErrorKind::Custom, "update requires a path")
+            })?;
 
-            if let Err(_e) = update(name, path) {
+            if let Err(e) = update(name, path) {
                 eprintln!(
                     "Failed to update {} with path {}",
                     name,
                     path.to_str().unwrap_or("[path failed to display]")
                 );
+                return Err(e)
             }
         },
         ("version", Some(_version_matches)) => match version() {

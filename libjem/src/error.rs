@@ -91,6 +91,8 @@ impl error::Error for Error {
 pub enum ErrorKind {
     /// Symlinked binaries are not found within `JAVA_ENV_MANAGER_HOME`
     BinariesNotFound,
+    /// Custom error for client application
+    Custom,
     /// More than one distribution has the same name
     DuplicateNames,
     /// Cause was an `std::io::Error`
@@ -120,6 +122,7 @@ impl ErrorKind {
     fn as_str(&self) -> &'static str {
         match *self {
             ErrorKind::BinariesNotFound => "bin folder not found",
+            ErrorKind::Custom => "custom error: please override",
             ErrorKind::DuplicateNames => "duplicate names found",
             ErrorKind::IoError => "unable to perform I/O",
             ErrorKind::NameNotFound => "distribution name not found",
