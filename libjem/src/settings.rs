@@ -35,16 +35,23 @@ impl Distribution {
     }
 
     /// Creates a new [`Distribution`] object
-    pub fn new(name: &str, path: &OsStr) -> Self {
+    pub fn new<S, T>(name: S, path: T) -> Self
+    where
+        S: Into<String>,
+        T: Into<OsString>,
+    {
         Distribution {
-            name: String::from(name),
-            path: OsString::from(path),
+            name: name.into(),
+            path: path.into(),
         }
     }
 
     /// Set the path of the [`Distribution`]
-    pub fn set_path(&mut self, path: &OsStr) {
-        self.path = OsString::from(path);
+    pub fn set_path<T>(&mut self, path: T)
+    where
+        T: Into<OsString>,
+    {
+        self.path = path.into();
     }
 }
 
@@ -122,7 +129,10 @@ impl Settings {
     }
 
     /// Set the new set name
-    pub fn set_set(&mut self, name: &str) {
-        self.set = String::from(name);
+    pub fn set_set<T>(&mut self, name: T)
+    where
+        T: Into<String>,
+    {
+        self.set = name.into();
     }
 }

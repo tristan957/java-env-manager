@@ -33,8 +33,14 @@ impl Error {
     }
 
     /// Creates an [`Error`] object with a custom description
-    pub fn new_with_desc(kind: ErrorKind, description: String) -> Self {
-        Error { kind, description }
+    pub fn new_with_desc<T>(kind: ErrorKind, description: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Error {
+            kind,
+            description: description.into(),
+        }
     }
 }
 
