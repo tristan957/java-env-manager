@@ -96,8 +96,26 @@ impl Settings {
 
     /// Gets the location of the program directory
     pub fn get_program_dir() -> Option<OsString> {
-        env::var_os("JAVA_ENV_MANAGER_HOME")
-            .or_else(|| env::home_dir().map(|path| path.join(".java-env-manager").into()))
+        env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
+            env::var_os("XDG_CONFIG_HOME")
+                .and_then(|mut path: OsString| {
+                    path.push("/java-env-manager");
+                    Some(path)
+                })
+                .or_else(|| {
+                    env::home_dir()
+                        .and_then(|p| {
+                            let path = p.join(".config");
+                            if path.as_path().exists() {
+                                return Some(path.join("java-env-manager").into())
+                            }
+                            None
+                        })
+                        .or_else(|| {
+                            env::home_dir().and_then(|p| Some(p.join(".java-env-manager").into()))
+                        })
+                })
+        })
     }
 
     /// Returns the currently set name
