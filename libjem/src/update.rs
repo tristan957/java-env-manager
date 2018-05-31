@@ -2,6 +2,11 @@ use error::{Error, ErrorKind, Result};
 use settings::Settings;
 use std::ffi::OsStr;
 
+/// Update the path of a distribution
+///
+/// # Errors
+///
+/// * [`ErrorKind::NameNotFound`](enum.ErrorKind.html)
 pub fn update(name: &str, path: &OsStr) -> Result<()> {
     let mut settings = Settings::get()?;
     let mut name_found = false;

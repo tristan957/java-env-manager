@@ -1,6 +1,7 @@
 use error::Result;
 use settings::Settings;
 
+// Removes a distribution from the settiings based on its name
 pub fn remove(name: &str) -> Result<()> {
     let mut settings = Settings::get()?;
     {

@@ -1,6 +1,11 @@
 use error::{Error, ErrorKind, Result};
 use settings::{Distribution, Settings};
 
+/// Return the currently set distribution
+///
+/// # Errors
+///
+/// * [`ErrorKind::NameNotFound`](enum.ErrorKind.html)
 pub fn version() -> Result<Distribution> {
     let settings = Settings::get()?;
     let name = settings.get_set();

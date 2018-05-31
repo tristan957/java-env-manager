@@ -1,3 +1,6 @@
+//! `libjem` serves as a backend for the command line executable and GUI.
+//! Each command is separated into its own module. More testing to come.
+
 #[macro_use]
 
 extern crate serde_derive;
