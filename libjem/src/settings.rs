@@ -94,7 +94,13 @@ impl Settings {
         self.distributions.as_mut()
     }
 
-    /// Gets the location of the program directory
+    /// Gets the location of the program directory.
+    /// This method will search through the following until one exists
+    ///
+    /// 1. `$JAVA_ENV_MANAGER_HOME`
+    /// 2. `$XDG_CONFIG_HOME/java-env-manager`
+    /// 3. `$HOME/.config/java-env-manager`
+    /// 4. `$HOME/.java-env-manager`
     pub fn get_program_dir() -> Option<OsString> {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::var_os("XDG_CONFIG_HOME")
