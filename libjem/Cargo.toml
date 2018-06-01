@@ -4,7 +4,6 @@ version = "0.8.0"
 authors = ["Tristan Partin <tristan.partin@gmail.com>"]
 description = "`libjem` serves as a backend for the Java Environment Manager command line executable and GUI. Each command is separated into its own module. More testing to come."
 license = "Apache-2.0"
-license-file = "../LICENSE"
 repository = "https:gitlab.com/tristan957/java-env-manager"
 
 [dependencies]

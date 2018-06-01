@@ -2,6 +2,9 @@
 name = "java-env-manager"
 version = "0.8.0"
 authors = ["Tristan Partin <tristan.partin@gmail.com>"]
+description = "The Java Envrionment Manager CLI is tool to manage multiple Java distributions on a system."
+license = "Apache-2.0"
+repository = "https:gitlab.com/tristan957/java-env-manager"
 
 [dependencies]
 clap = {version = "2.31", features = ["yaml"]}
