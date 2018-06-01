@@ -254,10 +254,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "java-env-manager"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "clap 2.31.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "libjem 0.1.0",
+ "libjem 0.8.0",
 ]
 
 [[package]]
@@ -265,7 +265,7 @@ name = "java-env-manager-gui"
 version = "0.1.0"
 dependencies = [
  "gtk 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "libjem 0.1.0",
+ "libjem 0.8.0",
 ]
 
 [[package]]
@@ -280,7 +280,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "libjem"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "serde 1.0.64 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.64 (registry+https://github.com/rust-lang/crates.io-index)",
