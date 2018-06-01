@@ -105,8 +105,9 @@ impl Settings {
         env::var_os("JAVA_ENV_MANAGER_HOME").or_else(|| {
             env::var_os("XDG_CONFIG_HOME")
                 .and_then(|mut path| {
+                    println!("{:?}", &path);
                     path.push("/java-env-manager");
-                    Some(path)
+                    return Some(path)
                 })
                 .or_else(|| {
                     env::home_dir()

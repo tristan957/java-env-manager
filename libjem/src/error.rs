@@ -80,11 +80,12 @@ impl error::Error for Error {
 /// ```
 /// use libjem::error::{Error, ErrorKind};
 ///
-/// let e = Error::new(ErrorKind::IoError)
+/// let e = Error::new(ErrorKind::IoError);
 /// match e.kind() {
-///     ErrorKind::BinariesNotound => {},
+///     ErrorKind::BinariesNotFound => {},
 ///     ErrorKind::DuplicateNames => {},
 ///     // ...
+///     _ => {},
 /// }
 /// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
